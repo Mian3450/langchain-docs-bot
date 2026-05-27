@@ -1,9 +1,6 @@
 {
   "name": "langchain-docs-bot",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
+  "image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
   "postCreateCommand": "pip install --user -e '.[dev]'",
   "remoteEnv": {
     "PYTHONUNBUFFERED": "1"
