@@ -37,14 +37,14 @@ Telegram ─► aiogram (rate-limit + logging middleware)
          │  retrieve (Chroma, similarity/MMR, top_k)  │
          │      │                                     │
          │      ▼                                     │
-         │  generate (gpt-4o-mini, [N] citations)     │
+         │  generate (Groq Llama 3.1, [N] citations)  │
          └──────────────────────────────────────────┘
                 │
                 ▼
    answer + 📚 numbered source links
 
 Offline ingestion (run once):
-  GitHub docs ─► strip MDX ─► chunk ─► embed (text-embedding-3-small) ─► ChromaDB
+  GitHub docs ─► strip MDX ─► chunk ─► embed (bge-small, local ONNX) ─► ChromaDB
 ```
 
 > **Note on the doc source:** LangChain moved its documentation out of the
@@ -62,8 +62,8 @@ See [docs/architecture.md](docs/architecture.md) for the full diagram and module
 | Bot framework | aiogram 3.x |
 | RAG framework | LangChain 0.3 |
 | Vector store | ChromaDB 1.x (local, persistent) |
-| Embeddings | OpenAI `text-embedding-3-small` |
-| LLM | OpenAI `gpt-4o-mini` (configurable) |
+| Embeddings | FastEmbed `BAAI/bge-small-en-v1.5` (local ONNX, free) — swappable to OpenAI |
+| LLM | Groq `llama-3.1-8b-instant` (free tier) — swappable to OpenAI `gpt-4o-mini` |
 | Doc source | `langchain-ai/docs` GitHub repo (`src/oss`) |
 | Quality metrics | DeepEval (Answer Relevancy, Faithfulness, Contextual Precision) |
 | Testing | pytest, pytest-asyncio |
@@ -117,9 +117,12 @@ All settings come from environment variables / `.env` (see `.env.example`):
 | Variable | Default | Description |
 |---|---|---|
 | `TELEGRAM_BOT_TOKEN` | — | **Required.** Bot token from @BotFather |
-| `OPENAI_API_KEY` | — | **Required.** OpenAI API key |
-| `EMBEDDING_MODEL` | `text-embedding-3-small` | Embedding model |
-| `LLM_MODEL` | `gpt-4o-mini` | Generation model |
+| `GROQ_API_KEY` | — | **Required when `LLM_PROVIDER=groq` (default).** Free tier at https://console.groq.com |
+| `OPENAI_API_KEY` | — | Required only when a provider is set to `openai`, or for `scripts/eval_rag.py` |
+| `LLM_PROVIDER` | `groq` | `groq` or `openai` |
+| `EMBEDDING_PROVIDER` | `fastembed` | `fastembed` (local ONNX) or `openai` |
+| `EMBEDDING_MODEL` | `BAAI/bge-small-en-v1.5` | Must match the selected provider |
+| `LLM_MODEL` | `llama-3.1-8b-instant` | Must match the selected provider |
 | `CHUNK_SIZE` / `CHUNK_OVERLAP` | `1000` / `200` | Chunking parameters |
 | `TOP_K` | `5` | Chunks retrieved per query |
 | `RETRIEVAL_STRATEGY` | `similarity` | `similarity` or `mmr` |

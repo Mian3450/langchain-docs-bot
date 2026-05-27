@@ -26,11 +26,26 @@ class Settings(BaseSettings):
 
     # --- Required secrets ---
     telegram_bot_token: SecretStr
-    openai_api_key: SecretStr
+    # Optional: needed only when llm_provider/embedding_provider is "openai", or
+    # when running scripts/eval_rag.py (DeepEval uses GPT-4 as the LLM judge).
+    openai_api_key: SecretStr | None = None
+    # Free-tier provider used by default for the demo. Get a key at
+    # https://console.groq.com (no card required).
+    groq_api_key: SecretStr | None = None
+
+    # --- Provider selection ---
+    # Defaults are picked so the project runs at zero cost:
+    #   - fastembed: local ONNX embeddings (BAAI/bge-small-en-v1.5, ~30MB)
+    #   - groq: free-tier LLM API, OpenAI-compatible
+    # Set to "openai" to use OpenAI embeddings / chat models instead.
+    embedding_provider: Literal["fastembed", "openai"] = "fastembed"
+    llm_provider: Literal["groq", "openai"] = "groq"
 
     # --- Model configuration ---
-    embedding_model: str = "text-embedding-3-small"
-    llm_model: str = "gpt-4o-mini"
+    # Model names depend on the selected provider. Defaults match the providers
+    # above; override via env var if you switch providers.
+    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    llm_model: str = "llama-3.1-8b-instant"
     llm_temperature: float = 0.2
 
     # --- RAG parameters ---
@@ -44,7 +59,9 @@ class Settings(BaseSettings):
     chroma_persist_dir: str = "./data/chroma"
     raw_docs_dir: str = "./data/raw"
     # Chroma collection name; bump when the embedding model/chunking changes.
-    collection_name: str = "langchain_docs"
+    # Suffixed with the embedding family because vector dimensionality differs
+    # between providers (1536 for text-embedding-3-small, 384 for bge-small).
+    collection_name: str = "langchain_docs_bge_small"
 
     # --- Bot behavior ---
     max_message_length: int = Field(default=4000, gt=0, le=4096)

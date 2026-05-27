@@ -6,7 +6,8 @@ Usage:
     python -m scripts.ingest_docs --reset         # wipe collection first
     python -m scripts.ingest_docs --skip-fetch    # reuse already-downloaded raw
 
-Requires OPENAI_API_KEY (embeddings cost a few cents for the full corpus).
+By default uses local FastEmbed embeddings (zero cost, no API key needed).
+Set EMBEDDING_PROVIDER=openai + OPENAI_API_KEY to use OpenAI embeddings instead.
 A GITHUB_TOKEN env var is optional and only raises the GitHub API rate limit.
 """
 

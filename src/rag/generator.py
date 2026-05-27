@@ -14,7 +14,6 @@ import structlog
 from langchain_core.documents import Document
 from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
 
 from src.config import get_settings
 
@@ -81,12 +80,39 @@ def _build_context(docs: list[Document]) -> tuple[str, list[Source]]:
 
 
 def _build_llm() -> BaseChatModel:
+    """Build the chat model based on ``settings.llm_provider``.
+
+    Imports are deferred so installing the unused provider's package is optional.
+    """
     settings = get_settings()
-    return ChatOpenAI(
-        model=settings.llm_model,
-        temperature=settings.llm_temperature,
-        api_key=settings.openai_api_key,
-    )
+
+    if settings.llm_provider == "groq":
+        from langchain_groq import ChatGroq
+
+        if settings.groq_api_key is None:
+            raise RuntimeError(
+                "llm_provider='groq' but GROQ_API_KEY is not set. "
+                "Get a free key at https://console.groq.com."
+            )
+        groq_llm: BaseChatModel = ChatGroq(
+            model=settings.llm_model,
+            temperature=settings.llm_temperature,
+            api_key=settings.groq_api_key,
+        )
+        return groq_llm
+
+    if settings.llm_provider == "openai":
+        from langchain_openai import ChatOpenAI
+
+        if settings.openai_api_key is None:
+            raise RuntimeError("llm_provider='openai' but OPENAI_API_KEY is not set.")
+        return ChatOpenAI(
+            model=settings.llm_model,
+            temperature=settings.llm_temperature,
+            api_key=settings.openai_api_key,
+        )
+
+    raise RuntimeError(f"unknown llm_provider: {settings.llm_provider!r}")
 
 
 async def generate_answer(

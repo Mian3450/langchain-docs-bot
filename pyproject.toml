@@ -14,9 +14,14 @@ dependencies = [
     "aiogram>=3.13,<4",
     "langchain>=0.3,<0.4",
     "langchain-openai>=0.2,<0.4",
+    # Free-tier LLM provider (default). OpenAI-compatible API, no card needed.
+    "langchain-groq>=0.2,<0.4",
     "langchain-chroma>=0.2,<0.3",
     "langchain-community>=0.3,<0.4",
     "langchain-text-splitters>=0.3,<0.4",
+    # Local ONNX embeddings (default). Pulls in `fastembed`, runtime ~150MB
+    # including the small bge model — much lighter than torch/sentence-transformers.
+    "fastembed>=0.4,<0.8",
     # chromadb 1.x ships prebuilt wheels (Rust hnsw bindings) — no C++ toolchain
     # needed; 0.x pulled chroma-hnswlib which fails to build without Visual Studio.
     "chromadb>=1.0,<2",
@@ -67,6 +72,7 @@ module = [
     "chromadb.*",
     "deepeval.*",
     "langchain_community.*",
+    "langchain_groq.*",
 ]
 ignore_missing_imports = true
 

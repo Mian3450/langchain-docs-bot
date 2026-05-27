@@ -16,6 +16,7 @@ import pytest
 # Inject dummy secrets before any `src` import triggers settings parsing.
 os.environ.setdefault("TELEGRAM_BOT_TOKEN", "test-token")
 os.environ.setdefault("OPENAI_API_KEY", "test-key")
+os.environ.setdefault("GROQ_API_KEY", "test-key")
 
 
 @pytest.fixture(autouse=True)

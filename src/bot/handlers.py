@@ -48,7 +48,8 @@ _HELP = (
 _ABOUT = (
     "<b>About</b>\n\n"
     "A portfolio demo of a production-grade RAG pipeline: LangChain + ChromaDB "
-    "for retrieval, OpenAI for embeddings & generation, aiogram for the bot.\n\n"
+    "for retrieval, FastEmbed for local embeddings, Groq for generation, "
+    "aiogram for the bot.\n\n"
     f'Source code: <a href="{PROJECT_REPO_URL}">{PROJECT_REPO_URL}</a>'
 )
 
