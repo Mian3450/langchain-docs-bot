@@ -1,0 +1,95 @@
+{
+  "description": "Hand-crafted Q/A pairs for DeepEval. expected_answer is a concise ground-truth reference used by metrics that need it (e.g. Contextual Precision). Covers a spread of LangChain topics.",
+  "items": [
+    {
+      "topic": "lcel",
+      "question": "What is LangChain Expression Language (LCEL)?",
+      "expected_answer": "LCEL is a declarative way to compose chains in LangChain using the pipe (|) operator. Runnables composed with LCEL get streaming, async, batch, and parallel execution support out of the box."
+    },
+    {
+      "topic": "lcel",
+      "question": "How do I compose two runnables together in LCEL?",
+      "expected_answer": "Use the pipe operator to connect runnables, e.g. chain = prompt | model | output_parser, where the output of each step is passed as input to the next."
+    },
+    {
+      "topic": "chains",
+      "question": "What is a chain in LangChain?",
+      "expected_answer": "A chain is a sequence of calls (to an LLM, tool, or data-processing step) composed together. In modern LangChain, chains are built as Runnables composed with LCEL."
+    },
+    {
+      "topic": "agents",
+      "question": "What is an agent in LangChain and how does it differ from a chain?",
+      "expected_answer": "An agent uses an LLM to decide which actions/tools to take and in what order, looping until it reaches an answer. A chain follows a fixed, predetermined sequence of steps, whereas an agent's control flow is dynamic."
+    },
+    {
+      "topic": "agents",
+      "question": "What are tools in the context of LangChain agents?",
+      "expected_answer": "Tools are functions an agent can call to interact with the world (search, calculators, APIs, retrievers). Each tool has a name, description, and input schema the LLM uses to decide when and how to call it."
+    },
+    {
+      "topic": "retrievers",
+      "question": "What is a retriever in LangChain?",
+      "expected_answer": "A retriever is an interface that returns relevant Documents for a given query string. Vector stores can be turned into retrievers via as_retriever(), but retrievers are a more general abstraction."
+    },
+    {
+      "topic": "retrievers",
+      "question": "What is Maximal Marginal Relevance (MMR) retrieval?",
+      "expected_answer": "MMR is a retrieval strategy that balances relevance to the query against diversity among the selected documents, reducing redundancy so the results aren't near-duplicates."
+    },
+    {
+      "topic": "vectorstores",
+      "question": "What is a vector store and how is it used in RAG?",
+      "expected_answer": "A vector store holds document embeddings and supports similarity search over them. In RAG it stores chunked documents so relevant context can be retrieved by embedding the query and finding nearest neighbors."
+    },
+    {
+      "topic": "embeddings",
+      "question": "What does an Embeddings model do in LangChain?",
+      "expected_answer": "An Embeddings model converts text into numeric vectors so semantically similar texts are close in vector space. LangChain exposes embed_documents and embed_query methods."
+    },
+    {
+      "topic": "text_splitters",
+      "question": "Why do we split documents into chunks before embedding?",
+      "expected_answer": "Documents are split into chunks so each piece fits the embedding model's context, retrieval is more precise, and only relevant passages are passed to the LLM. RecursiveCharacterTextSplitter is a common choice."
+    },
+    {
+      "topic": "prompts",
+      "question": "What is a PromptTemplate in LangChain?",
+      "expected_answer": "A PromptTemplate is a reusable, parameterized prompt with input variables that are filled in at runtime to produce the final prompt string or chat messages."
+    },
+    {
+      "topic": "output_parsers",
+      "question": "What is an output parser used for?",
+      "expected_answer": "An output parser transforms the raw text output of an LLM into a structured format, such as JSON, a Pydantic object, or a list, and can provide format instructions to the prompt."
+    },
+    {
+      "topic": "callbacks",
+      "question": "What are callbacks in LangChain?",
+      "expected_answer": "Callbacks let you hook into the lifecycle of LangChain runs (on LLM start/end, tool calls, chain steps) for logging, monitoring, streaming, and tracing."
+    },
+    {
+      "topic": "streaming",
+      "question": "How does streaming work for LangChain chains?",
+      "expected_answer": "Runnables expose a stream/astream method that yields output incrementally as the LLM generates tokens, which works automatically for LCEL-composed chains."
+    },
+    {
+      "topic": "memory",
+      "question": "How can a LangChain application maintain conversation history?",
+      "expected_answer": "By storing and passing previous messages back into the prompt, e.g. using message history utilities like RunnableWithMessageHistory that persist and retrieve chat history per session."
+    },
+    {
+      "topic": "document_loaders",
+      "question": "What is a document loader in LangChain?",
+      "expected_answer": "A document loader reads data from a source (files, web pages, databases) and returns it as LangChain Document objects with page_content and metadata."
+    },
+    {
+      "topic": "rag",
+      "question": "What are the main steps of a RAG pipeline?",
+      "expected_answer": "Load documents, split them into chunks, embed the chunks and store them in a vector store, retrieve relevant chunks for a query, and generate an answer with an LLM conditioned on the retrieved context."
+    },
+    {
+      "topic": "tool_calling",
+      "question": "What is tool calling (function calling) with chat models?",
+      "expected_answer": "Tool calling lets a chat model output a structured request to invoke a named tool with arguments matching a schema, which the application executes and feeds back to the model. Bind tools with bind_tools."
+    }
+  ]
+}

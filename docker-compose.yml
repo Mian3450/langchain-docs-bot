@@ -1,0 +1,19 @@
+services:
+  bot:
+    build: .
+    image: langchain-docs-bot
+    container_name: langchain-docs-bot
+    restart: unless-stopped
+    env_file: .env
+    # Persist the Chroma collection (and downloaded raw docs) across restarts.
+    volumes:
+      - ./data:/app/data
+    # The bot needs a populated vector store. Run ingestion once before/after
+    # `up` (it shares the same image and volume):
+    #
+    #   docker compose run --rm bot python -m scripts.ingest_docs
+    #
+    # then start the bot with:
+    #
+    #   docker compose up -d
+    command: ["python", "-m", "src.main"]
